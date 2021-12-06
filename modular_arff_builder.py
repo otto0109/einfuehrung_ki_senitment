@@ -16,6 +16,7 @@ from features.words_features import would_counter
 from features.words_features import neg_pos_words_ratio
 from features.words_features import exclamation_mark_counter
 from features.words_features import not_counter
+from features.words_features import part_of_speech
 
 def main():
     
@@ -43,11 +44,12 @@ def main():
     #feature_functions.append(bad_words)
     feature_functions.append(positiv_negativ_words)
     #feature_functions.append(highlighted_words)
-    #feature_functions.append(no_more_words)
-    feature_functions.append(would_counter)
+    feature_functions.append(no_more_words)
+    #feature_functions.append(would_counter)
     feature_functions.append(neg_pos_words_ratio)
     feature_functions.append(exclamation_mark_counter)
     feature_functions.append(not_counter)
+    #feature_functions.append(part_of_speech)
 
     csv_reader = csv.reader(open(data_file_path, encoding="utf-8"), delimiter = data_file_delimiter)
     data_lines = [line for line in csv_reader]
