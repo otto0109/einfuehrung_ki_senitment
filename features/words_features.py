@@ -1,5 +1,6 @@
 import csv
 import re
+import spacy
 
 pos_words_dir = "C:/Users/PC/PycharmProjects/Super_duper_ki/data/positive-words.txt"
 neg_words_dir = "C:/Users/PC/PycharmProjects/Super_duper_ki/data/negative-words.txt"
@@ -7,7 +8,7 @@ neg_words_dir = "C:/Users/PC/PycharmProjects/Super_duper_ki/data/negative-words.
 
 def bad_words(inputtext):
     data_file_delimiter = "\t"
-    data_file_path = "C:/Users/PC/PycharmProjects/Super_duper_ki/data/bad_word_list.csv"
+    data_file_path = "C:/Users/U725803/Documents/Super_duper_ki/data/bad_word_list.csv"
     splittext = inputtext.split(" ")
     total = 0
     csv_reader = csv.reader(open(data_file_path, encoding="utf-8"), delimiter=data_file_delimiter)
@@ -23,12 +24,15 @@ def bad_words(inputtext):
 
 
 def positiv_negativ_words(inputtext):
+
     global data_lines
     global sentimented_words
     global sentimented_pos
     global sentimented_score
 
-    splittext = inputtext.split(" ")
+    sp = spacy.load("en_core_web_sm")
+    sen = sp(inputtext)
+
     total = 0
 
     positiv = 0
