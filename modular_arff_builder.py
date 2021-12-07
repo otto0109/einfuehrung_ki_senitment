@@ -17,6 +17,7 @@ from features.words_features import neg_pos_words_ratio
 from features.words_features import exclamation_mark_counter
 from features.words_features import not_counter
 from features.words_features import part_of_speech
+from features.words_features import analyse_sentence_score
 
 def main():
     
@@ -50,6 +51,7 @@ def main():
     feature_functions.append(exclamation_mark_counter)
     feature_functions.append(not_counter)
     #feature_functions.append(part_of_speech)
+    feature_functions.append(analyse_sentence_score)
 
     csv_reader = csv.reader(open(data_file_path, encoding="utf-8"), delimiter = data_file_delimiter)
     data_lines = [line for line in csv_reader]

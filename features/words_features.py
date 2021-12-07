@@ -1,10 +1,25 @@
 import csv
 import re
 import spacy
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-basePath = "C:/Users/U725803/Documents/"
+basePath = "C:/Users/PC/DevProjects/Uni/"
 pos_words_dir = basePath + "Super_duper_ki/data/positive-words.txt"
 neg_words_dir = basePath + "Super_duper_ki/data/negative-words.txt"
+analyzer = SentimentIntensityAnalyzer()
+
+def analyse_sentence_score(inputtext):
+    score = analyzer.polarity_scores(inputtext)
+    neg = score.get('neg')
+    neu = score.get('neu')
+    pos = score.get('pos')
+    compound = score.get('compound')
+    return_dict = {
+        'values': [neg, neu, pos, compound],
+        'heads': ['@Attribute analyse_sentence_neg REAL', '@Attribute analyse_sentence_neu REAL',
+                  '@Attribute analyse_sentence_pos REAL', '@Attribute analyse_sentence_compound REAL']}
+    return return_dict
+
 
 def part_of_speech(inputtext):
     global sp
