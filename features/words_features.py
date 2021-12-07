@@ -2,13 +2,52 @@ import csv
 import re
 import spacy
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import language_tool_python
 
 basePath = "C:/Users/PC/DevProjects/Uni/"
 pos_words_dir = basePath + "Super_duper_ki/data/positive-words.txt"
 neg_words_dir = basePath + "Super_duper_ki/data/negative-words.txt"
-analyzer = SentimentIntensityAnalyzer()
+
+def fix_grammer(inputtext):
+    global tool
+
+    if not "tool" in globals():
+        tool = language_tool_python.LanguageTool('en-US')
+
+    text = inputtext
+    text = tool.correct(text)
+    text = text.replace(" 't", "'t")
+    return text
+
+def bad_grammer(inputtext):
+    global tool
+
+    if not "tool" in globals():
+        tool = language_tool_python.LanguageTool('en-US')
+
+    text = inputtext
+    matches = tool.check(text)
+    matches = [rule for rule in matches if not is_bad_rule(rule)]
+    return_dict = {
+        'values': [ len(text)/(len(matches) + 1) ],
+        'heads': ['@Attribute bad_grammer_ratio REAL']}
+    return return_dict
+
+def is_bad_rule(rule):
+    if rule.ruleId == "UPPERCASE_SENTENCE_START":
+        return True
+
+    if rule.ruleId == "I_LOWERCASE":
+        return True
+
+    return False
 
 def analyse_sentence_score(inputtext):
+    global analyzer
+
+    if not "analyzer" in globals():
+        analyzer = SentimentIntensityAnalyzer()
+
     score = analyzer.polarity_scores(inputtext)
     neg = score.get('neg')
     neu = score.get('neu')
@@ -153,6 +192,10 @@ def positiv_negativ_words(inputtext):
                     word = token.lemma_
 
                 score = sentimented_score[index]
+
+                if "n't" in token.text or "'t" in token.text:
+                    score = score * -1
+
                 pos = sentimented_pos[index]
                 spacyPos = "n" if token.pos_ == "NOUN" else "a" if token.pos_ == "ADJ" else "v" if token.pos_ == "VERB" else token.pos_
 
@@ -300,7 +343,7 @@ def not_counter(inputtext):
     splittext = inputtext.split(" ")
     total = 0
     for word in splittext:
-        if (word == "not" or word == "n't" or word == "'t"):
+        if ("not" in word or "n't" in word or "'t" in word):
             total += 1
 
     return_dict = {'values': [total], 'heads': ['@Attribute not_counter REAL']}

@@ -18,6 +18,8 @@ from features.words_features import exclamation_mark_counter
 from features.words_features import not_counter
 from features.words_features import part_of_speech
 from features.words_features import analyse_sentence_score
+from features.words_features import fix_grammer
+from features.words_features import bad_grammer
 
 def main():
     
@@ -40,15 +42,16 @@ def main():
     
     feature_functions = []
 
+    #feature_functions.append(bad_grammer)
     #feature_functions.append(text_length)
     #feature_functions.append(sentence_length)
     #feature_functions.append(bad_words)
     feature_functions.append(positiv_negativ_words)
     #feature_functions.append(highlighted_words)
-    feature_functions.append(no_more_words)
+    #feature_functions.append(no_more_words)
     #feature_functions.append(would_counter)
-    feature_functions.append(neg_pos_words_ratio)
-    feature_functions.append(exclamation_mark_counter)
+    #feature_functions.append(neg_pos_words_ratio)
+    #feature_functions.append(exclamation_mark_counter)
     feature_functions.append(not_counter)
     #feature_functions.append(part_of_speech)
     feature_functions.append(analyse_sentence_score)
@@ -65,9 +68,13 @@ def main():
         logging.info('    verarbeite Line Nr ' + str(line_count) + '    in ModularArffBuilder')
         logging.info('    lines total in modularArffBuilder: ' + str(len(data_lines)))
         num_feature = 0
+        data_text = line[csv_value_index]
         for feature in feature_functions:
             num_feature += 1
-            data_text = line[csv_value_index]
+
+            # todo remove if not allowed
+            if num_feature == 1:
+                data_text = fix_grammer(data_text)
 
             result_dict = feature(data_text)
 
