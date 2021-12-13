@@ -20,6 +20,8 @@ from features.words_features import part_of_speech
 from features.words_features import analyse_sentence_score
 from features.words_features import fix_grammer
 from features.words_features import bad_grammer
+from features.words_features import afinn
+from features.words_features import score_pos_neg
 
 def main():
     
@@ -30,7 +32,7 @@ def main():
     
     #data_file_path = "./data/hatespeech_task_train.csv"
     #data_file_path = "./data/spam_task_train.csv"
-    data_file_path = "./data/sentiment_task_train.csv"
+    data_file_path = "./data/sentiment_task_test.csv"
     
     features_csv_path = base_path + "features.csv"
     data_file_delimiter = "\t"
@@ -50,16 +52,22 @@ def main():
     #feature_functions.append(highlighted_words)
     #feature_functions.append(no_more_words)
     #feature_functions.append(would_counter)
-    #feature_functions.append(neg_pos_words_ratio)
+    feature_functions.append(neg_pos_words_ratio)
     #feature_functions.append(exclamation_mark_counter)
     feature_functions.append(not_counter)
     #feature_functions.append(part_of_speech)
     feature_functions.append(analyse_sentence_score)
+    #feature_functions.append(afinn)
+    feature_functions.append(score_pos_neg)
 
     csv_reader = csv.reader(open(data_file_path, encoding="utf-8"), delimiter = data_file_delimiter)
     data_lines = [line for line in csv_reader]
     
     arff_lines = list()
+
+    f = open("depugGrammer.txt", "w")
+    f.write("")
+    f.close()
         
     line_count = 1
     for line in data_lines:
@@ -70,6 +78,7 @@ def main():
         num_feature = 0
         data_text = line[csv_value_index]
         for feature in feature_functions:
+
             num_feature += 1
 
             # todo remove if not allowed

@@ -3,20 +3,161 @@ import re
 import spacy
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import language_tool_python
+import io
+from afinn import Afinn
+from nltk.corpus import sentiwordnet as swnb
+from pywsd.lesk import simple_lesk
+import nltk
 
-basePath = "C:/Users/PC/DevProjects/Uni/"
+nltk.download('sentiwordnet')
+basePath = "C:/Users/thorg/IdeaProjects/"
 pos_words_dir = basePath + "Super_duper_ki/data/positive-words.txt"
 neg_words_dir = basePath + "Super_duper_ki/data/negative-words.txt"
-
+#Quelle: https://stackoverflow.com/questions/43018030/replace-apostrophe-short-words-in-python
+contractions = {
+"ain't": "am not",
+"aren't": "are not",
+"can't": "cannot",
+"can't've": "cannot have",
+"'cause": "because",
+"could've": "could have",
+"couldn't": "could not",
+"couldn't've": "could not have",
+"didn't": "did not",
+"doesn't": "does not",
+"don't": "do not",
+"hadn't": "had not",
+"hadn't've": "had not have",
+"hasn't": "has not",
+"haven't": "have not",
+"he'd": "he had",
+"he'd've": "he would have",
+"he'll": "he shall",
+"he'll've": "he shall have",
+"he's": "he has",
+"how'd": "how did",
+"how'd'y": "how do you",
+"how'll": "how will",
+"how's": "how has",
+"i'd": "I had",
+"i'd've": "I would have",
+"i'll": "I shall",
+"i'll've": "I shall have",
+"i'm": "I am",
+"i've": "I have",
+"isn't": "is not",
+"it'd": "it had",
+"it'd've": "it would have",
+"it'll": "it shall",
+"it'll've": "it shall have",
+"it's": "it has",
+"let's": "let us",
+"ma'am": "madam",
+"mayn't": "may not",
+"might've": "might have",
+"mightn't": "might not",
+"mightn't've": "might not have",
+"must've": "must have",
+"mustn't": "must not",
+"mustn't've": "must not have",
+"needn't": "need not",
+"needn't've": "need not have",
+"o'clock": "of the clock",
+"oughtn't": "ought not",
+"oughtn't've": "ought not have",
+"shan't": "shall not",
+"sha'n't": "shall not",
+"shan't've": "shall not have",
+"she'd": "she had",
+"she'd've": "she would have",
+"she'll": "she shall",
+"she'll've": "she shall have",
+"she's": "she has",
+"should've": "should have",
+"shouldn't": "should not",
+"shouldn't've": "should not have",
+"so've": "so have",
+"so's": "so as",
+"that'd": "that would",
+"that'd've": "that would have",
+"that's": "that has",
+"there'd": "there had",
+"there'd've": "there would have",
+"there's": "there has",
+"they'd": "they had",
+"they'd've": "they would have",
+"they'll": "they will",
+"they'll've": "they will have",
+"they're": "they are",
+"they've": "they have",
+"to've": "to have",
+"wasn't": "was not",
+"we'd": "we would",
+"we'd've": "we would have",
+"we'll": "we will",
+"we'll've": "we will have",
+"we're": "we are",
+"we've": "we have",
+"weren't": "were not",
+"what'll": "what will",
+"what'll've": "what will have",
+"what're": "what are",
+"what's": "what is",
+"what've": "what have",
+"when's": "when is",
+"when've": "when have",
+"where'd": "where did",
+"where's": "where is",
+"where've": "where have",
+"who'll": "who will",
+"who'll've": "who will have",
+"who's": "who is",
+"who've": "who have",
+"why's": "why is",
+"why've": "why have",
+"will've": "will have",
+"won't": "will not",
+"won't've": "will not have",
+"would've": "would have",
+"wouldn't": "would not",
+"wouldn't've": "would not have",
+"y'all": "you all",
+"y'all'd": "you all would",
+"y'all'd've": "you all would have",
+"y'all're": "you all are",
+"y'all've": "you all have",
+"you'd": "you would",
+"you'd've": "you would have",
+"you'll": "you will",
+"you'll've": "you will have",
+"you're": "you are",
+"you've": "you have"
+}
 def fix_grammer(inputtext):
     global tool
 
     if not "tool" in globals():
         tool = language_tool_python.LanguageTool('en-US')
 
+
     text = inputtext
+
+    with io.open("depugGrammer.txt", 'a', encoding='utf8') as f:
+        f.write(text)
+        f.write("\n")
     text = tool.correct(text)
     text = text.replace(" 't", "'t")
+    for word in text.split():
+        if word.lower() in contractions:
+            text = text.replace(word, contractions[word.lower()])
+    text = tool.correct(text)
+    text = text.lower()
+    with io.open("depugGrammer.txt", 'a', encoding='utf8') as f:
+            f.write(text)
+            f.write("\n")
+            f.write("\n")
+
+    f.close()
     return text
 
 def bad_grammer(inputtext):
@@ -59,6 +200,53 @@ def analyse_sentence_score(inputtext):
                   '@Attribute analyse_sentence_pos REAL', '@Attribute analyse_sentence_compound REAL']}
     return return_dict
 
+def score_pos_neg(inputtext):
+    global sp
+
+    total = 0
+    positiv = 0
+    negativ = 0
+    gefundeneWörter = 1
+
+    if not "sp" in globals():
+        sp = spacy.load("en_core_web_sm")
+
+    sen = sp(inputtext)
+
+    for token in sen:
+        spacyPos = "n" if token.pos_ == "NOUN" else "a" if token.pos_ == "ADJ" else "v" if token.pos_ == "VERB" else "skip"
+
+        if spacyPos != "skip":
+            try:
+                answer = str(simple_lesk(inputtext, token.text, pos=spacyPos))
+                answer = answer[8:len(answer)-2]
+                score = swnb.senti_synset(answer)
+                if score is not None and score.obj_score() != 1:
+                    gefundeneWörter = gefundeneWörter + 1
+                    total = total + float(score.obj_score())
+                    positiv = positiv + float(score.pos_score())
+                    negativ = negativ + float(score.neg_score())
+            except:
+                index = 0
+    return_dict = {'values': [total, total / gefundeneWörter, negativ / gefundeneWörter, positiv / gefundeneWörter],
+                       'heads': ['@Attribute positiv_negativ_words_swn REAL',
+                                 '@Attribute positiv_negativ_words_swn_ratio REAL',
+                                 '@Attribute negativ_words_swn_ratio REAL',
+                                 '@Attribute positiv_words_swn_ratio REAL']}
+
+    return return_dict
+
+
+def afinn(inputtext):
+
+    afinn = Afinn(language='en')
+
+    score = afinn.score(inputtext)
+
+    return_dict = {
+        'values': [score],
+        'heads': ['@Attribute afinn_score REAL',]}
+    return return_dict
 
 def part_of_speech(inputtext):
     global sp
@@ -192,9 +380,6 @@ def positiv_negativ_words(inputtext):
                     word = token.lemma_
 
                 score = sentimented_score[index]
-
-                if "n't" in token.text or "'t" in token.text:
-                    score = score * -1
 
                 pos = sentimented_pos[index]
                 spacyPos = "n" if token.pos_ == "NOUN" else "a" if token.pos_ == "ADJ" else "v" if token.pos_ == "VERB" else token.pos_
