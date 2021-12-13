@@ -1,7 +1,6 @@
 *.log
-
 .idea
-
 .env
-
-generated
+generated/
+debugGrammer.txt
+omt.arff
