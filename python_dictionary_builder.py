@@ -64,28 +64,28 @@ def main():
         sen = sp(data_text)
 
         for token in sen:
-            if token.text in overall_use:
-                overall_use[token.text] = overall_use[token.text] + 1
+            if token.lemma_ in overall_use:
+                overall_use[token.lemma_] = overall_use[token.lemma_] + 1
             else:
-                overall_use[token.text] = 1
+                overall_use[token.lemma_] = 1
             if sentiment_type == "0":
-                if token.text in negativ_words:
-                    negativ_words[token.text] = negativ_words[token.text] + 1
+                if token.lemma_ in negativ_words:
+                    negativ_words[token.lemma_] = negativ_words[token.lemma_] + 1
                 else:
-                    negativ_words[token.text] = 1
-                if token.text in words:
-                    words[token.text] = words[token.text] - 1
+                    negativ_words[token.lemma_] = 1
+                if token.lemma_ in words:
+                    words[token.lemma_] = words[token.lemma_] - 1
                 else:
-                    words[token.text] = -1
+                    words[token.lemma_] = -1
             else:
-                if token.text in positiv_words:
-                    positiv_words[token.text] = positiv_words[token.text] + 1
+                if token.lemma_ in positiv_words:
+                    positiv_words[token.lemma_] = positiv_words[token.lemma_] + 1
                 else:
-                    positiv_words[token.text] = 1
-                if token.text in words:
-                    words[token.text] = words[token.text] + 1
+                    positiv_words[token.lemma_] = 1
+                if token.lemma_ in words:
+                    words[token.lemma_] = words[token.lemma_] + 1
                 else:
-                    words[token.text] = 1
+                    words[token.lemma_] = 1
         line_count += 1
 
     with io.open(grammer_cache_path, 'a', encoding='utf8') as f:

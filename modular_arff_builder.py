@@ -24,6 +24,7 @@ from features.grammer_features import fix_grammer
 from features.grammer_features import bad_grammer
 from features.lexicon_features import afinn
 from features.lexicon_features import senti_word_net
+from features.lexicon_features import own_lexikon
 
 def main():
     
@@ -59,6 +60,7 @@ def main():
     feature_functions.append(analyse_sentence_score)
     feature_functions.append(afinn)
     feature_functions.append(senti_word_net)
+    feature_functions.append(own_lexikon)
 
     print("generate Train arff\n")
 

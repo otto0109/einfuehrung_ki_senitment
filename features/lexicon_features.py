@@ -8,7 +8,9 @@ from pywsd.lesk import simple_lesk
 from afinn import Afinn
 
 nltk.download('sentiwordnet')
+
 basePath = "C:/Users/thorg/IdeaProjects/"
+words_dir = basePath + "Super_duper_ki/words.txt"
 pos_words_dir = basePath + "Super_duper_ki/data/positive-words.txt"
 neg_words_dir = basePath + "Super_duper_ki/data/negative-words.txt"
 
@@ -53,11 +55,11 @@ def senti_word_net(inputtext):
     senti_type = 0 if positiv <= negativ else 1
 
     return_dict = {'values': [total, total / gefundeneWörter, negativ / gefundeneWörter, positiv / gefundeneWörter, senti_type],
-               'heads': ['@Attribute positiv_negativ_words_swn REAL',
-                         '@Attribute positiv_negativ_words_swn_ratio REAL',
-                         '@Attribute negativ_words_swn_ratio REAL',
-                         '@Attribute positiv_words_swn_ratio REAL',
-                         '@Attribute decision_swn REAL']}
+                   'heads': ['@Attribute positiv_negativ_words_swn REAL',
+                             '@Attribute positiv_negativ_words_swn_ratio REAL',
+                             '@Attribute negativ_words_swn_ratio REAL',
+                             '@Attribute positiv_words_swn_ratio REAL',
+                             '@Attribute decision_swn REAL']}
 
     return return_dict
 
@@ -164,6 +166,43 @@ def senti_words(inputtext):
 
     return return_dict
 
+def own_lexikon(inputtext):
+    global sp
+    global lexikon
+
+    if not "sp" in globals():
+        sp = spacy.load("en_core_web_sm")
+
+    if not "lexikon" in globals():
+        lexikon = {}
+        lines = [line.rstrip() for line in open(words_dir)]
+        for line in lines:
+            split_line = line.split(" ")
+            lexikon[split_line[0]] = split_line[1]
+
+
+    splittext = sp(inputtext)
+
+    total = 0
+
+    word_num = -1
+    negation_words = negation(inputtext)
+
+    for token in splittext:
+        word = token.text
+        if len(word) > 0:
+            word_num = word_num + 1
+            if token.lemma_ in lexikon:
+                if negate_word_score(word_num, negation_words):
+                    total += float(lexikon[token.lemma_]) * -1
+                total += float(lexikon[token.lemma_])
+
+    senti_type = 0 if total <= 0 else 1
+
+    return_dict = {'values': [total, senti_type],
+                   'heads': ['@Attribute own_lexikon_ratio REAL', '@Attribute own_lexikon_decision REAL']}
+
+    return return_dict
 
 def simple_lexikon(inputtext):
     global sp
@@ -274,11 +313,13 @@ def negation(inputtext):
             if word == words[x]:
                 senti_negation.append([word, x])
 
+    return senti_negation
+
 
 def negate_word_score(word_index, negation_words):
-    for negation_word in negation_word:
+    for negation_word in negation_words:
         if negation_word[1] != word_index:
-            if negation_word - word_index > -3 and negation_word - word_index < 3:
+            if -3 < negation_word[1] - word_index < 3:
                 return True
 
     return False
