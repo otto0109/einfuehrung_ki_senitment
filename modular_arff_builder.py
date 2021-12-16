@@ -38,7 +38,7 @@ def main():
     data_file_path = "./data/sentiment_task_train.csv"
     data_file_path_test = "./data/sentiment_task_test.csv"
     debug_grammer_path = base_path + "depugGrammer.txt"
-    debug_grammer_path_test = base_path + "depugGrammer.txt"
+    debug_grammer_path_test = base_path + "depugGrammer_test.txt"
     grammer_cache_path = "grammer_cache.txt"
     grammer_cache_path_test = "grammer_cache_test.txt"
 
@@ -46,19 +46,19 @@ def main():
     feature_functions = []
 
     #feature_functions.append(bad_grammer)
-    feature_functions.append(text_length)
-    feature_functions.append(sentence_length)
-    feature_functions.append(bad_words)
+    #feature_functions.append(text_length)
+    #feature_functions.append(sentence_length)
+    #feature_functions.append(bad_words)
     feature_functions.append(senti_words)
-    feature_functions.append(highlighted_words)
-    feature_functions.append(no_more_words)
+    #feature_functions.append(highlighted_words)
+    #feature_functions.append(no_more_words)
     feature_functions.append(would_counter)
     feature_functions.append(simple_lexikon)
-    feature_functions.append(exclamation_mark_counter)
-    feature_functions.append(negation_counter)
-    feature_functions.append(part_of_speech)
+    #feature_functions.append(exclamation_mark_counter)
+    #feature_functions.append(negation_counter)
+    #feature_functions.append(part_of_speech)
     feature_functions.append(analyse_sentence_score)
-    feature_functions.append(afinn)
+    #feature_functions.append(afinn)
     feature_functions.append(senti_word_net)
     feature_functions.append(own_lexikon)
 
