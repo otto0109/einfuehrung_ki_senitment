@@ -91,6 +91,8 @@ def generateArff(base_path, data_file_path, feature_functions, debug_grammer_pat
     f.write("")
     f.close()
 
+    fixed_grammer = []
+
     if os.path.isfile(grammer_cache_path):
         fixed_grammer = [line.rstrip() for line in open(grammer_cache_path)]
         if len(fixed_grammer) == 0:
