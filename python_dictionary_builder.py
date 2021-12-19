@@ -95,12 +95,19 @@ def main():
     fi = open("words.txt", "w")
     fi.close()
 
+    print("====================================== Overview of words in document ======================================")
     for key in words:
+        overall_count = overall_use[key]
         if words[key] < 0:
             score = (negativ_words[key] * -1)
+            negative_count = score * -1
+            positive_count = overall_count - negative_count
         else:
             score = positiv_words[key]
-        words[key] = score / overall_use[key]
+            positive_count = score
+            negative_count = overall_count - positive_count
+        print(key + ": POS: " + str(positive_count) + "; NEG: " + str(negative_count) + "; OVERALL: " + str(overall_count))
+        words[key] = score / overall_count
 
     words = dict(sorted(words.items(), key=lambda item: item[1], reverse=True))
 
@@ -109,7 +116,7 @@ def main():
             if overall_use[key] > 10:
                 file.write(key + " " + str(words[key]) + "\n")
         file.close()
-
+    print("Finished. File was successfully generated.")
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', autosize = False, time = ""):
     """
     Call in a loop to create terminal progress bar
