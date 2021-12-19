@@ -25,6 +25,10 @@ from features.grammer_features import bad_grammer
 from features.lexicon_features import afinn
 from features.lexicon_features import senti_word_net
 from features.lexicon_features import own_lexikon
+from features.words_features import if_counter
+from features.words_features import unless_counter
+from features.words_features import until_counter
+
 
 def main():
     
@@ -51,16 +55,19 @@ def main():
     #feature_functions.append(bad_words)
     feature_functions.append(senti_words)
     #feature_functions.append(highlighted_words)
-    #feature_functions.append(no_more_words)
-    feature_functions.append(would_counter)
+    #feature_functions.append(no_more_words) disabled, because it's already in own_lexikon
+    #feature_functions.append(would_counter) disabled, because it's already in own_lexikon
     feature_functions.append(simple_lexikon)
-    #feature_functions.append(exclamation_mark_counter)
+    #feature_functions.append(exclamation_mark_counter) disabled, because it's already in own_lexikon
     #feature_functions.append(negation_counter)
     #feature_functions.append(part_of_speech)
     feature_functions.append(analyse_sentence_score)
     #feature_functions.append(afinn)
     feature_functions.append(senti_word_net)
     feature_functions.append(own_lexikon)
+    #feature_functions.append(if_counter) disabled, because it's already in own_lexikon
+    feature_functions.append(unless_counter)
+    feature_functions.append(until_counter)
 
     print("generate Train arff\n")
 
@@ -213,6 +220,7 @@ def generateArff(base_path, data_file_path, feature_functions, debug_grammer_pat
     end = time.time()
     print(end - start)
 
+
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', autosize = False, time = ""):
     """
     Call in a loop to create terminal progress bar
@@ -237,6 +245,7 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     # Print New Line on Complete
     if iteration == total:
         print()
+
 
 if __name__ == "__main__":
     main()

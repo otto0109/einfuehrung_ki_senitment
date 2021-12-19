@@ -28,6 +28,7 @@ def is_response(inputtext):
     return_dict = {'values': [respo], 'heads': ['@Attribute amount_response REAL']}
     return return_dict
 
+
 def sale(inputtext):
     splittext = inputtext.split(" ")
     total = 0
@@ -36,6 +37,7 @@ def sale(inputtext):
             total += 1
     return_dict = {'values': [total], 'heads': ['@Attribute amount_sale REAL']}
     return return_dict
+
 
 def cap_word_ratio(inputtext):
     splittext = inputtext.split(" ")

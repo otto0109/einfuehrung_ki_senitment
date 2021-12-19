@@ -2,6 +2,7 @@ def text_length(inputtext):
     return_dict = {'values': [len(inputtext)], 'heads': ['@Attribute text_length REAL']}
     return return_dict
 
+
 def sentence_length(inputtext):
     splittext = inputtext.split(".")
     total = 0

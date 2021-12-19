@@ -5,6 +5,7 @@ import time
 import os.path
 import io
 
+
 def main():
     data_file_delimiter = "\t"
     data_file_path = "./data/sentiment_task_train.csv"
@@ -117,6 +118,8 @@ def main():
                 file.write(key + " " + str(words[key]) + "\n")
         file.close()
     print("Finished. File was successfully generated.")
+
+
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', autosize = False, time = ""):
     """
     Call in a loop to create terminal progress bar
@@ -141,6 +144,7 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     # Print New Line on Complete
     if iteration == total:
         print()
+
 
 if __name__ == "__main__":
     main()

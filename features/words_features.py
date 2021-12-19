@@ -21,6 +21,7 @@ def analyse_sentence_score(inputtext):
                   '@Attribute analyse_sentence_pos REAL', '@Attribute analyse_sentence_compound REAL']}
     return return_dict
 
+
 def part_of_speech(inputtext):
     global sp
 
@@ -146,4 +147,37 @@ def exclamation_mark_counter(inputText):
             total += 1
 
     return_dict = {'values': [total], 'heads': ['@Attribute exclamation_mark_counter REAL']}
+    return return_dict
+
+
+def if_counter(inputtext):
+    splittext = inputtext.split(" ")
+    total = 0
+    for word in splittext:
+        if (word == "if"):
+            total += 1
+
+    return_dict = {'values': [total], 'heads': ['@Attribute if_counter REAL']}
+    return return_dict
+
+
+def unless_counter(inputtext):
+    splittext = inputtext.split(" ")
+    total = 0
+    for word in splittext:
+        if (word == "would"):
+            total += 1
+
+    return_dict = {'values': [total], 'heads': ['@Attribute unless_counter REAL']}
+    return return_dict
+
+
+def until_counter(inputtext):
+    splittext = inputtext.split(" ")
+    total = 0
+    for word in splittext:
+        if (word == "would"):
+            total += 1
+
+    return_dict = {'values': [total], 'heads': ['@Attribute until_counter REAL']}
     return return_dict

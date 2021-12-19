@@ -2,6 +2,7 @@ import language_tool_python
 import io
 import contractions
 
+
 def fix_grammer(inputtext):
     global tool
 
@@ -27,6 +28,7 @@ def fix_grammer(inputtext):
 
     return text, write
 
+
 def bad_grammer(inputtext):
     global tool
 
@@ -40,6 +42,7 @@ def bad_grammer(inputtext):
         'values': [ len(text)/(len(matches) + 1) ],
         'heads': ['@Attribute bad_grammer_ratio REAL']}
     return return_dict
+
 
 def is_bad_rule(rule):
     if rule.ruleId == "UPPERCASE_SENTENCE_START":

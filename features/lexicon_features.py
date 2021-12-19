@@ -166,6 +166,7 @@ def senti_words(inputtext):
 
     return return_dict
 
+
 def own_lexikon(inputtext):
     global sp
     global lexikon
@@ -203,6 +204,7 @@ def own_lexikon(inputtext):
                    'heads': ['@Attribute own_lexikon_ratio REAL', '@Attribute own_lexikon_decision REAL']}
 
     return return_dict
+
 
 def simple_lexikon(inputtext):
     global sp
