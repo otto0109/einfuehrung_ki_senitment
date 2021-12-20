@@ -3,6 +3,7 @@ import io
 import contractions
 
 
+# Yes Thorge really just misspelled the word "grammar" without intention. So we'll keep it like this lol
 def fix_grammer(inputtext):
     global tool
 
