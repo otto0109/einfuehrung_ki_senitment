@@ -26,19 +26,19 @@ pip install -U wn==0.0.22
 * Afinn: `pip install afinn` (**Optional**, because not used currently)
 
 
-##How to Run
+## How to Run
 ### 1. Change the basePath in `modular_arff_builder.py` to the Path of your project. (Config files would be way to easy)
-###2. Run `run.bat` on Windows.
+### 2. Run `run.bat` on Windows.
 (Models for training and testing will be generated and packages are being installed)
 ### 2. OR Run`python modular_arff_builder.py`
 ### 3. Then open the generated .arff file in Explorer in [Weka 3](https://www.cs.waikato.ac.nz/ml/weka/).
 
 
-##Troubleshoot
+## Troubleshoot
 ### Cacheing
 **When the data or preprocessing changes,** you should **delete `grammer_cache.txt` and `grammer_cache_test.txt`**
-###ModuleNotFoundError: No module named 'language_tool_python'
+### ModuleNotFoundError: No module named 'language_tool_python'
 Go to Settings -> Project -> Python Intepreter -> +
 
-##More
+## More
 ### Check out our [video](http://tiny.cc/sentiment_analysis) explaining every feature
