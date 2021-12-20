@@ -9,7 +9,7 @@ from afinn import Afinn
 
 nltk.download('sentiwordnet')
 
-basePath = "C:/Users/thorg/IdeaProjects/"
+basePath = "C:/Users/PC/DevProjects/Uni/"
 words_dir = basePath + "Super_duper_ki/words.txt"
 pos_words_dir = basePath + "Super_duper_ki/data/positive-words.txt"
 neg_words_dir = basePath + "Super_duper_ki/data/negative-words.txt"
